@@ -1,0 +1,63 @@
+pip install pandas matplotlib
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ---------------------------------------------------------
+# 1. Load the Data
+# ---------------------------------------------------------
+# Here we use mock data to test the logic. 
+# Later, replace this block with: df = pd.read_csv('your_youtube_data.csv')
+data = {
+    'Video_Title': ['Python Tutorial', 'Minecraft Gameplay', 'Pop Music Video', 'Learn Math', 'Speedrun VOD'],
+    'Category': ['Education', 'Gaming', 'Music', 'Education', 'Gaming'],
+    'Views': [500000, 2500000, 8000000, 300000, 1500000],
+    'Likes': [25000, 150000, 600000, 10000, 80000]
+}
+df = pd.DataFrame(data)
+
+print("--- Data Overview ---")
+print(df.head(), "\n")
+
+# ---------------------------------------------------------
+# 2. Categorical Data Analysis
+# ---------------------------------------------------------
+# Group the data by 'Category' to find total views and likes
+category_stats = df.groupby('Category')[['Views', 'Likes']].sum()
+category_stats = category_stats.sort_values(by='Views', ascending=False)
+
+print("--- Engagement by Category ---")
+print(category_stats, "\n")
+
+# ---------------------------------------------------------
+# 3. Bar Chart Visualization (Views by Category)
+# ---------------------------------------------------------
+plt.figure(figsize=(8, 5))
+# Using a bar chart to compare discrete categories
+category_stats['Views'].plot(kind='bar', color=['#4C72B0', '#55A868', '#C44E52'])
+
+plt.title('Total YouTube Views by Category', fontsize=14)
+plt.xlabel('Video Category', fontsize=12)
+plt.ylabel('Total Views (in millions)', fontsize=12)
+plt.xticks(rotation=0) # Keeps the category names horizontal
+plt.tight_layout()
+
+# Save the plot to your images folder for your GitHub README!
+# plt.savefig('images/views_bar_chart.png') 
+plt.show()
+
+# ---------------------------------------------------------
+# 4. Pie Chart Visualization (Share of Likes)
+# ---------------------------------------------------------
+plt.figure(figsize=(7, 7))
+# Using a pie chart to show parts of a whole
+plt.pie(category_stats['Likes'], 
+        labels=category_stats.index, 
+        autopct='%1.1f%%', # Shows percentages with 1 decimal place
+        startangle=140, 
+        colors=['#4C72B0', '#55A868', '#C44E52'])
+
+plt.title('Share of Total Likes by Category', fontsize=14)
+plt.tight_layout()
+
+# plt.savefig('images/likes_pie_chart.png')
+plt.show()
